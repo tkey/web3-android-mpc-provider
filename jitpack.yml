@@ -1,0 +1,4 @@
+jdk:
+  - openjdk11
+install:
+  - ./gradlew :web3-android-mpc-provider:build :web3-android-mpc-provider:publishToMavenLocal

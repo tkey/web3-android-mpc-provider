@@ -60,6 +60,9 @@ afterEvaluate {
         publications {
             release(MavenPublication) {
                 from components.release
+                groupId = 'com.github.tkey'
+                artifactId = 'web3-android-mpc-provider'
+                version = '0.0.2'
             }
         }
     }

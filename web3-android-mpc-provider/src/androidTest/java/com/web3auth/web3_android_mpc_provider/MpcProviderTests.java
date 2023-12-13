@@ -7,6 +7,8 @@ import com.web3auth.tss_client_android.client.TSSClientError;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.web3j.protocol.Web3j;
+import org.web3j.protocol.core.methods.response.EthSendTransaction;
+import org.web3j.protocol.core.methods.response.EthTransaction;
 import org.web3j.protocol.http.HttpService;
 
 import java.io.IOException;
@@ -79,7 +81,16 @@ public class MpcProviderTests {
         Web3j web3j = Web3j.build(new HttpService(url));
         BigInteger gasLimit = BigInteger.valueOf(21000);
         String toAddress = "0xE09543f1974732F5D6ad442dDf176D9FA54a5Be0";
-        account.signLegacyTransaction(web3j, toAddress, 0.001, null, gasLimit);
+        String signedTransaction = account.signLegacyTransaction(web3j, toAddress, 0.001, null, gasLimit);
+        EthSendTransaction transaction = web3j.ethSendRawTransaction(signedTransaction).sendAsync().get();
+        if (transaction.getError() != null) {
+            // Check if error was not caused by insufficient funds instead of a validation failure.
+            String error = transaction.getError().getMessage();
+            if (!error.equals("INTERNAL_ERROR: insufficient funds")) {
+                // validation failed, throw error.
+                throw new CustomSigningError(transaction.getError().getMessage());
+            }
+        }
     }
 
     @Test
@@ -92,8 +103,16 @@ public class MpcProviderTests {
         String url = "https://rpc.ankr.com/eth_goerli";
         Web3j web3j = Web3j.build(new HttpService(url));
         BigInteger gasLimit = BigInteger.valueOf(21000);
-
         String toAddress = "0xE09543f1974732F5D6ad442dDf176D9FA54a5Be0";
-        account.signTransaction(web3j, toAddress, 0.001, 0.001, null, gasLimit);
+        String signedTransaction = account.signTransaction(web3j, toAddress, 0.001, 0.0000000000000001, null, gasLimit);
+        EthSendTransaction transaction = web3j.ethSendRawTransaction(signedTransaction).sendAsync().get();
+        if (transaction.getError() != null) {
+            // Check if error was not caused by insufficient funds instead of a validation failure.
+            String error = transaction.getError().getMessage();
+            if (!error.equals("INTERNAL_ERROR: insufficient funds")) {
+                // validation failed, throw error.
+                throw new CustomSigningError(transaction.getError().getMessage());
+            }
+        }
     }
 }

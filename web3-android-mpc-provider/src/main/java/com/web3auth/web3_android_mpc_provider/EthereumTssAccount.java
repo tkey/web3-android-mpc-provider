@@ -26,6 +26,7 @@ import org.web3j.protocol.core.DefaultBlockParameterName;
 import org.web3j.protocol.core.methods.response.EthChainId;
 import org.web3j.protocol.core.methods.response.EthGasPrice;
 import org.web3j.protocol.core.methods.response.EthGetTransactionCount;
+import org.web3j.tx.gas.DefaultGasProvider;
 import org.web3j.utils.Convert;
 import org.web3j.utils.Numeric;
 
@@ -105,8 +106,9 @@ public class EthereumTssAccount {
         Triple<BigInteger, BigInteger, Byte> signatureResult = sign(encodedTransactionString);
 
         Byte v = signatureResult.getThird();
-        if (v < 27) {
-            v = (byte) (v + 27);
+        // EIP155 replay protection is required over RPC
+        if (v < 35) {
+            v = (byte) ((chainId.byteValue() * 2) + (v + 35));
         }
 
         Sign.SignatureData signatureData = new Sign.SignatureData(v,
@@ -126,7 +128,6 @@ public class EthereumTssAccount {
         BigInteger nonce = countResponse.getTransactionCount();
         EthGasPrice gasPriceResponse = web3j.ethGasPrice().send();
         BigInteger gasPrice = gasPriceResponse.getGasPrice();
-
         BigInteger value = Convert.toWei(Double.toString(amount), Convert.Unit.ETHER).toBigInteger();
         BigInteger maxPriorityFeePerGas = Convert.toWei(Double.toString(minerTip), Convert.Unit.ETHER).toBigInteger();
 

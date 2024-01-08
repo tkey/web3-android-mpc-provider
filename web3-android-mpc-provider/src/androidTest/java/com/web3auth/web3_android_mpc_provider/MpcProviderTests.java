@@ -45,13 +45,13 @@ public class MpcProviderTests {
             "{\"sig\":\"d94979a0f743a8a41630167622c5b443b148f231bb2293e60a17ab4ea7ebdf38713b81b0bc9161ecd3949ddcf8cfca9734f136ba02c2e4e670fb4b8523299ab01b\",\"data\":\"eyJleHAiOjE2OTM0NjYxMTAsInRlbXBfa2V5X3giOiI2MTg3NTM3ZTc1YThhNWQ3NWQzZjhkMGZmYzE4NjMwNTRjYjEzNmE3YzRjYWVjNWRkYjUyZjViNmY1MTcyZDEwIiwidGVtcF9rZXlfeSI6ImFhNTNhNmE2N2YzOTE1NzNmYTA1YTVkZWViZjM2MDVkM2MzODljNjhjMDhlOGI5YzllNDQyODU1ZWYyYWE2ZTkiLCJ2ZXJpZmllcl9uYW1lIjoiZ29vZ2xlLWxyYyIsInZlcmlmaWVyX2lkIjoiaHFqYW5nOTVAZ21haWwuY29tIiwic2NvcGUiOiIifQ==\"}"
     };
 
-    BigInteger[] nodeIndexs = {new BigInteger("1"), new BigInteger("2"), new BigInteger("3")};
+    BigInteger[] nodeIndexes = {new BigInteger("1"), new BigInteger("2"), new BigInteger("3")};
 
     @Test
     public void testSigningMessage() throws TSSClientError, CustomSigningError {
         EthTssAccountParams params = new EthTssAccountParams(
                 fullAddress, factorKey, tssNonce, tssShare, tssIndex, selected_tag, verifier, verifierId,
-                nodeIndexs, tssEndpoints, sigs);
+                nodeIndexes, tssEndpoints, sigs);
 
         EthereumTssAccount account = new EthereumTssAccount(params);
 
@@ -63,7 +63,7 @@ public class MpcProviderTests {
     public void testSignTypedData() throws TSSClientError, IOException, CustomSigningError {
         EthTssAccountParams params = new EthTssAccountParams(
                 fullAddress, factorKey, tssNonce, tssShare, tssIndex, selected_tag, verifier, verifierId,
-                nodeIndexs, tssEndpoints, sigs);
+                nodeIndexes, tssEndpoints, sigs);
 
         EthereumTssAccount account = new EthereumTssAccount(params);
 
@@ -74,7 +74,7 @@ public class MpcProviderTests {
     public void testSigningLegacyTransaction() throws TSSClientError, CustomSigningError, ExecutionException, InterruptedException {
         EthTssAccountParams params = new EthTssAccountParams(
                 fullAddress, factorKey, tssNonce, tssShare, tssIndex, selected_tag, verifier, verifierId,
-                nodeIndexs, tssEndpoints, sigs);
+                nodeIndexes, tssEndpoints, sigs);
         EthereumTssAccount account = new EthereumTssAccount(params);
         // setup Web3j
         String url = "https://rpc.ankr.com/eth_goerli";
@@ -97,7 +97,7 @@ public class MpcProviderTests {
     public void testSigningTransaction() throws TSSClientError, CustomSigningError, ExecutionException, InterruptedException, IOException {
         EthTssAccountParams params = new EthTssAccountParams(
                 fullAddress, factorKey, tssNonce, tssShare, tssIndex, selected_tag, verifier, verifierId,
-                nodeIndexs, tssEndpoints, sigs);
+                nodeIndexes, tssEndpoints, sigs);
         EthereumTssAccount account = new EthereumTssAccount(params);
         // setup Web3j
         String url = "https://rpc.ankr.com/eth_goerli";

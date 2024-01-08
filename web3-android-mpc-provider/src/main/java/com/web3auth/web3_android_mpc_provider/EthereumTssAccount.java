@@ -187,7 +187,7 @@ public class EthereumTssAccount {
 
         boolean ready = client.isReady();
         if (!ready) {
-            throw new EthereumSignerError(EthereumSignerError.ErrorType.UNKNOWN_ERROR);
+            throw new CustomSigningError("Client has not finished precompute in allocated timeframe");
         }
 
         Triple<BigInteger, BigInteger, Byte> signatureResult;
@@ -199,7 +199,7 @@ public class EthereumTssAccount {
                 signatureResult.getSecond(), signatureResult.getThird(), Utils.convertToBytes(ethAccountParams.publicKey));
 
         if (!verified) {
-            throw new EthereumSignerError(EthereumSignerError.ErrorType.UNKNOWN_ERROR);
+            throw new CustomSigningError("Signature validation failed");
         }
 
         return signatureResult;
